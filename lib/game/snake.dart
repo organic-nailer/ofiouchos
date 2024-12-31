@@ -4,13 +4,11 @@ import 'package:ofiouchos/util/direction.dart';
 import 'package:ofiouchos/game/snake_body.dart';
 
 class Snake extends Component {
-  static const Color color = Colors.white;
-  static final Paint paint = Paint()..color = color;
-
   final double margin;
   final double radius;
   final double cellSize;
   final HeadType headType;
+  final Color color;
   Direction lastMovedDirection;
   Direction currentDirection;
 
@@ -29,15 +27,16 @@ class Snake extends Component {
     required this.headType,
     this.margin = 0,
     this.radius = 0,
+    this.color = Colors.white,
   }): lastMovedDirection = initialDirection,
       currentDirection = initialDirection {
-    generateBodies(length, initialDirection, initialPosX, initialPosY);
+    generateBodies(length, initialDirection, initialPosX, initialPosY, color);
   }
 
   int get posX => bodies.first.posX;
   int get posY => bodies.first.posY;
 
-  void generateBodies(int length, Direction direction, int posX, int posY) {
+  void generateBodies(int length, Direction direction, int posX, int posY, Color color) {
     final int dx;
     final int dy;
     switch (direction) {
@@ -71,6 +70,7 @@ class Snake extends Component {
         cellSize: cellSize,
         margin: margin,
         radius: radius,
+        color: color,
       ));
     }
     bodies.first.headType = HeadType.rectangle;
@@ -111,6 +111,7 @@ class Snake extends Component {
       margin: margin,
       radius: radius,
       headType: headType,
+      color: color,
     );
     add(newHead);
     bodies.insert(0, newHead);

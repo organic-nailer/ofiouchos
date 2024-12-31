@@ -49,11 +49,11 @@ class _GamePageState extends State<GamePage> {
       game = SnakeGame(isKeioMode: widget.isKeioMode);
       game.setOnGameOverCallback(() {
         setState(() {
-        FirebaseAnalytics.instance.logPostScore(
-          score: game.score,
-          level: game.score,
-          character: 'snake',
-        );
+          FirebaseAnalytics.instance.logPostScore(
+            score: game.score,
+            level: game.score,
+            character: 'snake',
+          );
           isGameOver = true;
         });
       });
@@ -70,35 +70,34 @@ class _GamePageState extends State<GamePage> {
   void onKeyEvent(KeyEvent event) {
     if (event is KeyDownEvent) {
       if (widget.isKeioMode) {
-        switch(event.logicalKey.keyLabel) {
-        case 'K':
-          game.requestControl(0, Direction.down);
-          break;
-        case 'E':
-          game.requestControl(0, Direction.left);
-          break;
-        case 'I':
-          game.requestControl(0, Direction.up);
-          break;
-        case 'O':
-          game.requestControl(0, Direction.right);
-          break;
+        switch (event.logicalKey.keyLabel) {
+          case 'K':
+            game.requestControl(0, Direction.down);
+            break;
+          case 'E':
+            game.requestControl(0, Direction.left);
+            break;
+          case 'I':
+            game.requestControl(0, Direction.up);
+            break;
+          case 'O':
+            game.requestControl(0, Direction.right);
+            break;
         }
-      }
-      else {
-        switch(event.logicalKey.keyLabel) {
-        case 'W':
-          game.requestControl(0, Direction.up);
-          break;
-        case 'A':
-          game.requestControl(0, Direction.left);
-          break;
-        case 'S':
-          game.requestControl(0, Direction.down);
-          break;
-        case 'D':
-          game.requestControl(0, Direction.right);
-          break;
+      } else {
+        switch (event.logicalKey.keyLabel) {
+          case 'W':
+            game.requestControl(0, Direction.up);
+            break;
+          case 'A':
+            game.requestControl(0, Direction.left);
+            break;
+          case 'S':
+            game.requestControl(0, Direction.down);
+            break;
+          case 'D':
+            game.requestControl(0, Direction.right);
+            break;
         }
       }
       switch (event.logicalKey.keyLabel) {
@@ -126,282 +125,365 @@ class _GamePageState extends State<GamePage> {
         focusNode: focusNode,
         autofocus: true,
         onKeyEvent: onKeyEvent,
-        child: Center(
-          child: AspectRatio(
-            aspectRatio: 2 / 3,
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      final width = constraints.maxWidth;
-                      return Column(
-                        children: [
-                          SizedBox(
-                            height: width * 0.1,
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Score: ${game.score}',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: width * 0.08,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                            child: AspectRatio(
-                              aspectRatio: 1,
-                              child: GameWidget(game: game, autofocus: false,)
-                            ),
-                          ),
-                          SizedBox(
-                            height: width * 0.4,
-                            child: Row(
-                              children: [
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.all(width * 0.02),
-                                      child: Joystick(
-                                        onControl: (d) {
-                                          if (d == Direction.none) return;
-                                          game.requestControl(0, d);
-                                        },
-                                        size: width * 0.26,
-                                        knobSize: width * 0.12,
-                                        background: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white38,
-                                            borderRadius: BorderRadius.circular(width * 0.04),
-                                          ),
-                                        ),
-                                        knob: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white70,
-                                            borderRadius: BorderRadius.circular(width * 0.02),
-                                          ),
-                                          child: CustomPaint(
-                                            painter: widget.isKeioMode 
-                                              ? KeioFacePainter()
-                                              : WasedaFacePainter(),
-                                            child: SizedBox(
-                                              width: 96,
-                                              height: 96,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Row(
-                                      spacing: width * 0.01,
-                                      children: [
-                                        buildKeyCap(
-                                          widget.isKeioMode ? 'K' : 'W',
-                                          width * 0.06,
-                                        ),
-                                        buildKeyCap(
-                                          widget.isKeioMode ? 'E' : 'A',
-                                          width * 0.06,
-                                        ),
-                                        buildKeyCap(
-                                          widget.isKeioMode ? 'I' : 'S',
-                                          width * 0.06,
-                                        ),
-                                        buildKeyCap(
-                                          widget.isKeioMode ? 'O' : 'D',
-                                          width * 0.06,
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                                const Spacer(),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.all(width * 0.02),
-                                      child: Joystick(
-                                        onControl: (d) {
-                                          if (d == Direction.none) return;
-                                          game.requestControl(1, d);
-                                        },
-                                        size: width * 0.26,
-                                        knobSize: width * 0.12,
-                                        background: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white38,
-                                            borderRadius: BorderRadius.circular(width * 0.04),
-                                          ),
-                                        ),
-                                        knob: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.white70,
-                                            borderRadius: BorderRadius.circular(width * 0.02),
-                                          ),
-                                          child: CustomPaint(
-                                            painter: RectFacePainter(),
-                                            child: SizedBox(
-                                              width: 96,
-                                              height: 96,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Row(
-                                      spacing: width * 0.01,
-                                      children: [
-                                        buildKeyCap(
-                                          '↑',
-                                          width * 0.06,
-                                        ),
-                                        buildKeyCap(
-                                          '←',
-                                          width * 0.06,
-                                        ),
-                                        buildKeyCap(
-                                          '↓',
-                                          width * 0.06,
-                                        ),
-                                        buildKeyCap(
-                                          '→',
-                                          width * 0.06,
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      );
-                    }
-                  ),
-                ),
-                IgnorePointer(
-                  ignoring: !isGameOver,
-                  child: AnimatedOpacity(
-                    opacity: isGameOver ? 1 : 0, 
-                    duration: Duration(milliseconds: 1000),
-                    child: Container(
-                      color: Colors.black.withAlpha(200),
-                      child: Center(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
+        child: Stack(
+          children: [
+            Center(
+              child: AspectRatio(
+                aspectRatio: 2 / 3,
+                child: LayoutBuilder(builder: (context, constraints) {
+                  final width = constraints.maxWidth;
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: width * 0.1,
+                        child: Row(
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: FittedBox(
-                                fit: BoxFit.contain,
-                                child: Text(
-                                  'Game Over',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 96,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTapUp: (d) {
-                                setState(() {
-                                  FirebaseAnalytics.instance.logEvent(
-                                    name: "show_novel",
-                                  );
-                                  showNovel = !showNovel;
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 16.0),
-                                child: Text(
-                                  scoreToGreeting(game.score).$1,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            AnimatedSize(
-                              duration: Duration(milliseconds: 500),
-                              alignment: Alignment.topCenter,
-                              curve: Curves.easeInOut,
-                              child: showNovel ? Padding(
-                                padding: const EdgeInsets.only(left: 16.0),
-                                child: Text(
-                                  scoreToGreeting(game.score).$2,
-                                  style: TextStyle(
-                                    color: Colors.white54,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ) : Container(),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(
-                                "Score: ${game.score} pt",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 48,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            TextButton(
-                              onPressed: () {
-                                FirebaseAnalytics.instance.logEvent(
-                                  name: "share",
-                                );
-                                showShareDialog(context, "Οφιούχος - SCORE: ${game.score}");
-                              },
-                              child: Text(
-                                '共有',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 36,
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: resetGame,
-                              child: Text(
-                                '再挑戦',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 36,
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                FirebaseAnalytics.instance.logEvent(
-                                  name: "back_to_title",
-                                );
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                '終了',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 36,
-                                ),
+                            Text(
+                              'Score: ${game.score}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: width * 0.08,
                               ),
                             ),
                           ],
                         ),
                       ),
+                      Expanded(
+                        child: AspectRatio(
+                            aspectRatio: 1,
+                            child: GameWidget(
+                              game: game,
+                              autofocus: false,
+                            )),
+                      ),
+                      SizedBox(
+                        height: width * 0.4,
+                        child: Row(
+                          children: [
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(width * 0.02),
+                                  child: Joystick(
+                                    onControl: (d) {
+                                      if (d == Direction.none) return;
+                                      game.requestControl(0, d);
+                                    },
+                                    size: width * 0.26,
+                                    knobSize: width * 0.12,
+                                    background: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white38,
+                                        borderRadius:
+                                            BorderRadius.circular(width * 0.04),
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.topCenter,
+                                            child: Icon(
+                                              Icons.keyboard_arrow_up_rounded,
+                                              size: width * 0.1,
+                                              color: Colors.white30,
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Icon(
+                                              Icons.keyboard_arrow_left_rounded,
+                                              size: width * 0.1,
+                                              color: Colors.white30,
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Icon(
+                                              Icons.keyboard_arrow_down_rounded,
+                                              size: width * 0.1,
+                                              color: Colors.white30,
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Icon(
+                                              Icons
+                                                  .keyboard_arrow_right_rounded,
+                                              size: width * 0.1,
+                                              color: Colors.white30,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    knob: Container(
+                                      decoration: BoxDecoration(
+                                        color: widget.isKeioMode
+                                            ? Color(0xFFFEE086)
+                                            : Color(0xFFFFDAD7),
+                                        borderRadius:
+                                            BorderRadius.circular(width * 0.02),
+                                      ),
+                                      child: CustomPaint(
+                                        painter: widget.isKeioMode
+                                            ? KeioFacePainter()
+                                            : WasedaFacePainter(),
+                                        child: SizedBox(
+                                          width: 96,
+                                          height: 96,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  spacing: width * 0.01,
+                                  children: [
+                                    buildKeyCap(
+                                      widget.isKeioMode ? 'K' : 'W',
+                                      width * 0.06,
+                                    ),
+                                    buildKeyCap(
+                                      widget.isKeioMode ? 'E' : 'A',
+                                      width * 0.06,
+                                    ),
+                                    buildKeyCap(
+                                      widget.isKeioMode ? 'I' : 'S',
+                                      width * 0.06,
+                                    ),
+                                    buildKeyCap(
+                                      widget.isKeioMode ? 'O' : 'D',
+                                      width * 0.06,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            const Spacer(),
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(width * 0.02),
+                                  child: Joystick(
+                                    onControl: (d) {
+                                      if (d == Direction.none) return;
+                                      game.requestControl(1, d);
+                                    },
+                                    size: width * 0.26,
+                                    knobSize: width * 0.12,
+                                    background: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white38,
+                                        borderRadius:
+                                            BorderRadius.circular(width * 0.04),
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.topCenter,
+                                            child: Icon(
+                                              Icons.keyboard_arrow_up_rounded,
+                                              size: width * 0.1,
+                                              color: Colors.white30,
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Icon(
+                                              Icons.keyboard_arrow_left_rounded,
+                                              size: width * 0.1,
+                                              color: Colors.white30,
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.bottomCenter,
+                                            child: Icon(
+                                              Icons.keyboard_arrow_down_rounded,
+                                              size: width * 0.1,
+                                              color: Colors.white30,
+                                            ),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Icon(
+                                              Icons
+                                                  .keyboard_arrow_right_rounded,
+                                              size: width * 0.1,
+                                              color: Colors.white30,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    knob: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white70,
+                                        borderRadius:
+                                            BorderRadius.circular(width * 0.02),
+                                      ),
+                                      child: CustomPaint(
+                                        painter: RectFacePainter(),
+                                        child: SizedBox(
+                                          width: 96,
+                                          height: 96,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Row(
+                                  spacing: width * 0.01,
+                                  children: [
+                                    buildKeyCap(
+                                      '↑',
+                                      width * 0.06,
+                                    ),
+                                    buildKeyCap(
+                                      '←',
+                                      width * 0.06,
+                                    ),
+                                    buildKeyCap(
+                                      '↓',
+                                      width * 0.06,
+                                    ),
+                                    buildKeyCap(
+                                      '→',
+                                      width * 0.06,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  );
+                }),
+              ),
+            ),
+            IgnorePointer(
+              ignoring: !isGameOver,
+              child: AnimatedOpacity(
+                opacity: isGameOver ? 1 : 0,
+                duration: Duration(milliseconds: 1000),
+                child: Container(
+                  color: Colors.black.withAlpha(200),
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: Text(
+                              'Game Over',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 96,
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTapUp: (d) {
+                            setState(() {
+                              FirebaseAnalytics.instance.logEvent(
+                                name: "show_novel",
+                              );
+                              showNovel = !showNovel;
+                            });
+                          },
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text(
+                              scoreToGreeting(game.score).$1,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ),
+                        ),
+                        AnimatedSize(
+                          duration: Duration(milliseconds: 500),
+                          alignment: Alignment.topCenter,
+                          curve: Curves.easeInOut,
+                          child: showNovel
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  child: Text(
+                                    scoreToGreeting(game.score).$2,
+                                    style: TextStyle(
+                                      color: Colors.white54,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                )
+                              : Container(),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            "Score: ${game.score} pt",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 48,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextButton(
+                          onPressed: () {
+                            FirebaseAnalytics.instance.logEvent(
+                              name: "share",
+                            );
+                            showShareDialog(
+                                context, "Οφιούχος - SCORE: ${game.score}");
+                          },
+                          child: Text(
+                            '共有',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 36,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: resetGame,
+                          child: Text(
+                            '再挑戦',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 36,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            FirebaseAnalytics.instance.logEvent(
+                              name: "back_to_title",
+                            );
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            '終了',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 36,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                )
-              ],
-            ),
-          ),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -435,7 +517,7 @@ class KeyCapPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-        Rect.fromLTRB(0, 0, size.width, size.height), 
+        Rect.fromLTRB(0, 0, size.width, size.height),
         Radius.circular(16),
       ),
       Paint()..color = Colors.white,
@@ -453,9 +535,9 @@ class KeyCapPainter extends CustomPainter {
       textDirection: TextDirection.ltr,
     )..layout();
     textPainter.paint(
-      canvas, 
+      canvas,
       Offset(
-        (size.width - textPainter.width) / 2, 
+        (size.width - textPainter.width) / 2,
         (size.height - textPainter.height) / 2,
       ),
     );

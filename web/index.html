@@ -23,7 +23,7 @@
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="ofiouchos">
+  <meta name="apple-mobile-web-app-title" content="Οφιούχος(オフューホス)">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- twitter -->
@@ -38,10 +38,14 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>ofiouchos</title>
+  <title>Οφιούχος(オフューホス)</title>
   <link rel="manifest" href="manifest.json">
 </head>
-<body>
+<body style="background-color: black;">
   <script src="flutter_bootstrap.js" async></script>
+  <!--起動時には中央にloading.gifを表示-->
+  <div id="loading" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <img src="loading.gif" alt="loading" style="width: 100px; height: 100px;">
+  </div>
 </body>
 </html>

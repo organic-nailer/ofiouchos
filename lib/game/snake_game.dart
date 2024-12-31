@@ -102,6 +102,7 @@ class SnakeGame extends FlameGame implements SnakeGameInterface {
       radius: radius,
       length: 3,
       headType: isKeioMode ? HeadType.keio : HeadType.waseda,
+      color: isKeioMode ? Color(0xFFFEE086) : Color(0xFFFFDAD7)
     );
     world.add(snakeA!);
 

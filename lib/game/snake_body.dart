@@ -1,7 +1,5 @@
-import 'dart:async';
-import 'dart:math';
-
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 import 'package:ofiouchos/util/direction.dart';
 import 'package:ofiouchos/util/faces.dart';
@@ -13,8 +11,6 @@ enum HeadType {
 }
 
 class SnakeBody extends PositionComponent {
-  static const Color color = Colors.white;
-  static final Paint paint = Paint()..color = color;
   static const Color eyeColor = Colors.black;
   static final Paint eyePaint = Paint()..color = eyeColor;
   static const Color patternColor = Colors.black54;
@@ -26,6 +22,8 @@ class SnakeBody extends PositionComponent {
   final Direction direction;
   final int posX;
   final int posY;
+  final Color color;
+  late final Paint paint;
   HeadType? _headType;
   SnakeBody({
     required this.direction,
@@ -35,11 +33,14 @@ class SnakeBody extends PositionComponent {
     this.margin = 0,
     this.radius = 0,
     HeadType? headType,
+    this.color = Colors.white,
   }) {
     _headType = headType;
     anchor = Anchor.topLeft;
-    position = Vector2(posX * cellSize, posY * cellSize);
+    position = Vector2(posX * cellSize + cellSize/2, posY * cellSize + cellSize/2);
     size = Vector2(cellSize, cellSize);
+    scale = Vector2.all(0.0);
+    paint = Paint()..color = color;
   }
 
   @override
@@ -67,6 +68,11 @@ class SnakeBody extends PositionComponent {
         angle: direction.angle,
       ));
     }
+
+    // effect
+    final controller = EffectController(duration: 0.5, curve: Curves.easeIn);
+    add(ScaleEffect.to(Vector2.all(1.0), controller));
+    add(MoveEffect.to(Vector2(posX * cellSize, posY * cellSize), controller));
   }
 
   set headType(HeadType? headType) {
@@ -144,7 +150,22 @@ class SnakeBody extends PositionComponent {
     // }
   }
 
-  void purge() {
-    removeFromParent();
+  Future<void> purge() async {
+    final controller = EffectController(duration: 0.5, curve: Curves.easeIn);
+
+    final effectScale = SequenceEffect([
+      ScaleEffect.to(
+        Vector2.all(0.0),
+        controller,
+      ),
+      RemoveEffect(),
+    ]);
+    add(effectScale);
+    final effectMove = MoveEffect.to(position + size / 2,
+      controller,
+    );
+    add(effectMove);
+    // final effectOpacity = OpacityEffect.to(0.0, controller);
+    // add(effectOpacity);
   }
 }
