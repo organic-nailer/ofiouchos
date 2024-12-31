@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:ofiouchos/game_page.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({super.key});
@@ -135,10 +136,16 @@ class StartPage extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
+                      showPrevGames(context, "過去のゲームたち");
+                    },
+                    child: const Text('過去のゲームたち', style: TextStyle(fontSize: 24, color: Colors.white)),
+                  ),
+                  TextButton(
+                    onPressed: () {
                       FirebaseAnalytics.instance.logEvent(name: "license");
                       showLicensePage(context: context);
                     },
-                    child: const Text('ライセンス', style: TextStyle(fontSize: 24, color: Colors.white)),
+                    child: const Text('ライセンス', style: TextStyle(fontSize: 12, color: Colors.white)),
                   ),
                 ],
               ),
@@ -153,4 +160,66 @@ class StartPage extends StatelessWidget {
       )
     );
   }
+}
+
+Future<void> showPrevGames(BuildContext context, String content) async {
+  FirebaseAnalytics.instance.logEvent(name: "game_dialog");
+  await showDialog(context: context, builder: (context) {
+    return AlertDialog(
+      backgroundColor: Colors.blueGrey.shade900,
+      title: const Text('歴代年賀状たち', style: TextStyle(color: Colors.white)),
+      content: Wrap(
+        children: [
+          IconButton(
+            onPressed: () async {
+              await launchUrlString("https://year-greeting-condition2020.fastriver.dev/");
+            }, 
+            icon: Image.asset("assets/2020.png", width: 48, height: 48),
+            tooltip: "年賀状2020",
+          ),
+          IconButton(
+            onPressed: () async {
+              await launchUrlString("https://p987.fastriver.dev/");
+            }, 
+            icon: Image.asset("assets/2021.png", width: 48, height: 48),
+            tooltip: "p987",
+          ),
+          IconButton(
+            onPressed: () async {
+              await launchUrlString("https://tora.fastriver.dev/#/");
+            }, 
+            icon: Image.asset("assets/2022.png", width: 48, height: 48),
+            tooltip: "アウ[トラ]イツ",
+          ),
+          IconButton(
+            onPressed: () async {
+              await launchUrlString("https://usapyon.fastriver.dev/");
+            }, 
+            icon: Image.asset("assets/2023.png", width: 48, height: 48),
+            tooltip: "帰ってきた！うさぴょん",
+          ),
+          IconButton(
+            onPressed: () async {
+              await launchUrlString("https://toryumon.fastriver.dev/");
+            }, 
+            icon: Image.asset("assets/2024.png", width: 48, height: 48),
+            tooltip: "登竜門",
+          ),
+          IconButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+            }, 
+            icon: Image.asset("assets/2025.png", width: 48, height: 48),
+            tooltip: "Οφιούχος",
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('戻る', style: TextStyle(color: Colors.white70)),
+        ),
+      ],
+    );
+  });
 }
